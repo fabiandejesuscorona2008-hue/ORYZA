@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Vitrine da nossa loja com livros, cafés e jogos selecionados."/>
+  <title>Vitrine da Loja</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0f13;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% -20%, rgba(99,102,241,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      background: linear-gradient(90deg, #a78bfa, #60a5fa, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p {
+      margin-top: 0.6rem;
+      color: #94a3b8;
+      font-size: 1.05rem;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      text-align: center;
+      padding: 3rem 1rem 1.2rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #c4c4d8;
+    }
+    .section-title span {
+      margin-right: 0.4rem;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+      padding: 0 2rem;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .card-banner {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.45) 100%);
+    }
+
+    /* individual banner colors */
+    .book .card-banner   { background: linear-gradient(135deg, #312e81, #4c1d95, #6d28d9); }
+    .coffee .card-banner { background: linear-gradient(135deg, #431407, #7c2d12, #c2410c); }
+    .game .card-banner   { background: linear-gradient(135deg, #052e16, #14532d, #15803d); }
+
+    .card-body {
+      padding: 1.4rem 1.5rem 1.6rem;
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0.2rem 0.65rem;
+      border-radius: 99px;
+      margin-bottom: 0.75rem;
+    }
+    .book   .card-tag { background: rgba(139,92,246,0.2); color: #a78bfa; }
+    .coffee .card-tag { background: rgba(234,88,12,0.2);  color: #fb923c; }
+    .game   .card-tag { background: rgba(21,128,61,0.2);  color: #4ade80; }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #f1f1f8;
+    }
+    .card-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .price {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #f1f1f8;
+    }
+    .price small {
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: 400;
+      margin-left: 2px;
+    }
+    .btn {
+      border: none;
+      padding: 0.55rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+    }
+    .btn:hover   { opacity: 0.85; transform: scale(1.04); }
+    .btn:active  { transform: scale(0.97); }
+    .book   .btn { background: #7c3aed; color: #fff; }
+    .coffee .btn { background: #ea580c; color: #fff; }
+    .game   .btn { background: #16a34a; color: #fff; }
+
+    /* ── CART TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1e1e2e;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 0.9rem 1.4rem;
+      font-size: 0.92rem;
+      color: #e8e8f0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      z-index: 999;
+    }
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #475569;
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🛍️ Vitrine da Loja</h1>
+    <p>Livros, cafés e jogos — tudo que você precisa em um só lugar.</p>
+  </header>
+
+  <!-- LIVROS -->
+  <h2 class="section-title"><span>📚</span> Livros</h2>
+  <div class="grid">
+    <div class="card book" onclick="addCart('O Pequeno Príncipe')">
+      <div class="card-banner">📖</div>
+      <div class="card-body">
+        <span class="card-tag">Clássico</span>
+        <h3 class="card-title">O Pequeno Príncipe</h3>
+        <p class="card-desc">Uma obra atemporal de Antoine de Saint-Exupéry sobre amizade, amor e o olhar da criança sobre o mundo.</p>
+        <div class="card-footer">
+          <div class="price">R$ 29,90 <small>unid.</small></div>
+          <button class="btn" id="btn-livro">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAFÉS -->
+  <h2 class="section-title"><span>☕</span> Cafés</h2>
+  <div class="grid">
+    <div class="card coffee" onclick="addCart('Café Especial Arábica')">
+      <div class="card-banner">☕</div>
+      <div class="card-body">
+        <span class="card-tag">Especial</span>
+        <h3 class="card-title">Café Especial Arábica</h3>
+        <p class="card-desc">Grãos selecionados do sul de Minas Gerais, torrado médio. Sabor suave com notas de caramelo e frutas.</p>
+        <div class="card-footer">
+          <div class="price">R$ 45,00 <small>250g</small></div>
+          <button class="btn" id="btn-cafe">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOGOS -->
+  <h2 class="section-title"><span>🎮</span> Jogos</h2>
+  <div class="grid">
+    <div class="card game" onclick="addCart('Minecraft')">
+      <div class="card-banner">🎮</div>
+      <div class="card-body">
+        <span class="card-tag">Aventura</span>
+        <h3 class="card-title">Minecraft</h3>
+        <p class="card-desc">O jogo de construção e sobrevivência mais famoso do mundo. Crie, explore e sobreviva em mundos infinitos.</p>
+        <div class="card-footer">
+          <div class="price">R$ 79,90 <small>digital</small></div>
+          <button class="btn" id="btn-jogo">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast">🛒 Item adicionado ao carrinho!</div>
+
+  <footer>
+    <p>Vitrine da Loja &copy; 2026 — Projeto Escolar</p>
+  </footer>
+
+  <script>
+    let toastTimer;
+    function addCart(nome) {
+      const toast = document.getElementById('toast');
+      toast.textContent = '🛒 "' + nome + '" adicionado ao carrinho!';
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+  </script>
+
+</body>
+</html>
