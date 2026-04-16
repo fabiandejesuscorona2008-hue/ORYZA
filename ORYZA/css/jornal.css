@@ -1,0 +1,673 @@
+/* ============================================================
+   JORNAL VINTAGE — Folha do Amanhã
+   Paleta: amarelos envelhecidos, sépia, tinta preta
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=Special+Elite&display=swap');
+
+/* ── RESET & TOKENS ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  cursor: none !important;
+}
+
+:root {
+  --paper: #f2e8c6;
+  --paper-dark: #e8d9a8;
+  --paper-deeper: #d9c98a;
+  --ink: #1a1208;
+  --ink-fade: #3d2f12;
+  --ink-light: #6b5236;
+  --sepia: #8b6914;
+  --gold: #c9a227;
+  --gold-light: #e8c346;
+  --rust: #8b3a0f;
+  --coffee: #4a2912;
+  --coffee-mid: #7a4520;
+  --coffee-ring: rgba(74, 41, 18, 0.18);
+  --border: #3d2f12;
+}
+
+/* ── PAPER TEXTURE ── */
+body {
+  font-family: 'IM Fell English', Georgia, serif;
+  cursor: none;
+  background-color: #c9b48a;
+  background-image:
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 24px,
+      rgba(0, 0, 0, 0.03) 24px,
+      rgba(0, 0, 0, 0.03) 25px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── MAIN WRAPPER ── */
+.newspaper-wrap {
+  max-width: 1080px;
+  margin: 2rem auto 4rem;
+  background: var(--paper);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+  box-shadow:
+    0 0 0 2px var(--border),
+    0 0 0 6px var(--paper-dark),
+    0 0 0 8px var(--border),
+    8px 12px 40px rgba(0, 0, 0, 0.55),
+    -2px 2px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* ── CUSTOM ANIMATED CURSOR ── */
+#custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+}
+
+.cursor-lens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border: 2.5px solid var(--ink-fade);
+  border-radius: 50%;
+  background: rgba(242, 232, 198, 0.30);
+  /* Apenas propriedades que NÃO conflitem com a animation */
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  animation: cursor-breathe 2.8s ease-in-out infinite;
+}
+
+.cursor-handle {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 13px;
+  height: 3px;
+  background: var(--ink-fade);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  transform-origin: 0% 50%;
+  transition: background 0.2s ease;
+}
+
+@keyframes cursor-breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.75;
+  }
+}
+
+/* Click flash — usa box-shadow, não transform (evita conflito com animation) */
+#custom-cursor.clicking .cursor-lens {
+  background: rgba(201, 162, 39, 0.45);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.25), 0 0 12px rgba(201, 162, 39, 0.4);
+  animation: cursor-breathe-click 0.25s ease-in-out 1;
+}
+
+#custom-cursor.clicking .cursor-handle {
+  background: var(--gold);
+}
+
+@keyframes cursor-breathe-click {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.78);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Hover em botão/link — lupa pulsa maior */
+#custom-cursor.on-btn .cursor-lens {
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.18);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2);
+  animation: cursor-breathe-big 1.4s ease-in-out infinite;
+}
+
+@keyframes cursor-breathe-big {
+
+  0%,
+  100% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.38);
+    opacity: 0.8;
+  }
+}
+
+/* ── PAGE CURL (bottom-right corner) ── */
+.page-curl {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Shadow cast on the paper by the fold */
+.page-curl::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg,
+      transparent 55%,
+      rgba(0, 0, 0, 0.13) 56%,
+      rgba(0, 0, 0, 0.22) 70%,
+      transparent 71%);
+}
+
+/* The folded corner flap — body background color visible */
+.page-curl::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 64px 64px;
+  border-color: transparent transparent #c0a97a transparent;
+  filter: drop-shadow(-3px -3px 5px rgba(0, 0, 0, 0.35));
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  padding: 1.4rem 2.5rem 0;
+  border-bottom: 4px double var(--border);
+}
+
+.masthead-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.72rem;
+  color: var(--ink-fade);
+  letter-spacing: 0.5px;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.3rem;
+}
+
+.paper-motto {
+  font-style: italic;
+}
+
+.masthead-name {
+  text-align: center;
+  font-family: 'UnifrakturMaguntia', serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.12);
+  padding: 0.3rem 0;
+}
+
+.masthead-sub {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.68rem;
+  color: var(--ink-fade);
+  border-top: 1px solid var(--border);
+  padding-top: 0.3rem;
+  margin-top: 0.3rem;
+  padding-bottom: 0.8rem;
+}
+
+.masthead-edition {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── MARQUEE / HEADLINE STRIP ── */
+.headline-strip {
+  background: var(--ink);
+  color: var(--gold-light);
+  font-family: 'Special Elite', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0.35rem 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.headline-strip-inner {
+  display: inline-block;
+  animation: ticker 28s linear infinite;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── SECTION DIVIDER ── */
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.2rem 2.5rem 0.5rem;
+}
+
+.section-rule::before,
+.section-rule::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  box-shadow: 0 1px 0 var(--paper-dark), 0 2px 0 var(--border);
+}
+
+.section-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--ink-fade);
+  white-space: nowrap;
+}
+
+/* ── ADS GRID LAYOUT ── */
+.ads-page {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr 1px 1fr;
+  gap: 0;
+  padding: 0 0 2rem;
+}
+
+.col-divider {
+  background: var(--border);
+  margin: 1.5rem 0;
+}
+
+/* ── SINGLE AD COLUMN ── */
+.ad-col {
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* ── AD: HEADING BANNER ── */
+.ad-eyebrow {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--sepia);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0.2rem 0;
+  text-align: center;
+}
+
+.ad-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--ink);
+  text-align: center;
+}
+
+.ad-headline em {
+  font-style: italic;
+  color: var(--sepia);
+}
+
+.ad-subhead {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.82rem;
+  font-style: italic;
+  text-align: center;
+  color: var(--ink-fade);
+  line-height: 1.5;
+}
+
+/* ── AD IMAGE ── */
+.ad-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+.ad-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.25) contrast(1.05) brightness(0.97);
+  transition: filter 0.4s ease, transform 0.5s ease;
+  display: block;
+}
+
+.ad-col:hover .ad-img-wrap img {
+  filter: sepia(0.1) contrast(1.1) brightness(1.02);
+  transform: scale(1.02);
+}
+
+/* caption below image */
+.ad-img-caption {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.6rem;
+  text-align: center;
+  color: var(--ink-light);
+  letter-spacing: 0.5px;
+  margin-top: 0.2rem;
+}
+
+/* ── COFFEE STAIN AD ── */
+.coffee-stain-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coffee-stain-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: sepia(0.3) contrast(1.1);
+  box-shadow:
+    0 0 0 6px var(--coffee-ring),
+    0 0 0 14px rgba(74, 41, 18, 0.10),
+    0 0 0 28px rgba(74, 41, 18, 0.06),
+    0 0 0 46px rgba(74, 41, 18, 0.03),
+    0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease, filter 0.4s ease;
+}
+
+.ad-col:hover .coffee-stain-wrap img {
+  transform: scale(1.03);
+  filter: sepia(0.1) contrast(1.15) brightness(1.05);
+}
+
+/* stain ring pseudo decoration */
+.coffee-stain-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      transparent 42%,
+      rgba(74, 41, 18, 0.14) 44%,
+      rgba(74, 41, 18, 0.08) 46%,
+      transparent 50%,
+      rgba(74, 41, 18, 0.06) 52%,
+      transparent 57%);
+  pointer-events: none;
+}
+
+/* ── BODY TEXT / AD COPY ── */
+.ad-body {
+  font-family: 'IM Fell English', serif;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--ink-fade);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.ad-body+.ad-body {
+  margin-top: 0.4rem;
+}
+
+/* drop cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: 'Playfair Display', serif;
+  font-size: 3.4rem;
+  font-weight: 900;
+  line-height: 0.78;
+  margin: 0.05em 0.08em 0 0;
+  color: var(--ink);
+}
+
+/* ── PRICE TAG ── */
+.ad-price-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  padding: 0.5rem 0;
+  margin-top: 0.4rem;
+}
+
+.ad-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+}
+
+.ad-price sup {
+  font-size: 0.9rem;
+  vertical-align: super;
+  font-weight: 700;
+}
+
+.ad-price small {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.62rem;
+  color: var(--ink-light);
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 0.3rem;
+}
+
+/* ── CTA BUTTON ── */
+.btn-jornal {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--paper);
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 0.55rem 1.1rem;
+  cursor: none !important;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.btn-jornal::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--paper-dark);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+.btn-jornal:hover {
+  background: var(--coffee);
+  border-color: var(--coffee);
+  transform: translateY(-1px);
+  box-shadow: 3px 3px 0 var(--coffee-mid);
+}
+
+.btn-jornal:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 var(--coffee-mid);
+}
+
+/* Gold variant (game) */
+.btn-jornal.gold {
+  background: var(--ink);
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+.btn-jornal.gold::after {
+  border-color: var(--gold);
+  opacity: 0.5;
+}
+
+.btn-jornal.gold:hover {
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--sepia);
+}
+
+/* ── SMALL DECORATIVE ORNAMENTS ── */
+.ornament {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--ink-fade);
+  letter-spacing: 6px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── STAMP BADGE ── */
+.stamp {
+  display: inline-block;
+  border: 3px solid var(--gold);
+  border-radius: 50%;
+  padding: 0.6rem 0.5rem;
+  font-family: 'Special Elite', monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+  color: var(--gold);
+  line-height: 1.3;
+  transform: rotate(-8deg);
+  box-shadow: inset 0 0 0 1px var(--gold-light);
+  background: rgba(201, 162, 39, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.stamp:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.stamp-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── FOOTER ── */
+.paper-footer {
+  border-top: 4px double var(--border);
+  padding: 0.8rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--paper-dark);
+}
+
+.paper-footer p {
+  font-family: 'Special Elite', monospace;
+  font-size: 0.65rem;
+  color: var(--ink-fade);
+  letter-spacing: 0.5px;
+}
+
+
+/* ── HOVER GLOW ON AD COLUMNS ── */
+.ad-col {
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.ad-col::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201, 162, 39, 0.0) 0%, rgba(201, 162, 39, 0.06) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.ad-col:hover::before {
+  opacity: 1;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 760px) {
+  .ads-page {
+    grid-template-columns: 1fr;
+  }
+
+  .col-divider {
+    height: 1px;
+    margin: 0 2rem;
+  }
+
+  .masthead-name {
+    font-size: clamp(2.2rem, 12vw, 4rem);
+  }
+
+  .newspaper-wrap {
+    margin: 0.5rem;
+  }
+
+  .paper-footer {
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: center;
+  }
+}
