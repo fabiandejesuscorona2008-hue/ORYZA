@@ -2,7 +2,7 @@
 
 ## O que é esse projeto?
 
-É uma vitrine de loja feita em HTML. Ela mostra 3 tipos de produtos: um livro, um café e um jogo. Cada produto tem nome, descrição, preço e um botão de "Adicionar ao carrinho". Quando você clica no botão aparece uma mensagem na tela avisando que o item foi adicionado.
+É uma vitrine de loja feita em HTML. Ela mostra 3 tipos de produtos: um livro, um café e um jogo. Cada produto tem nome, descrição, preço e um botão de "Saiba Mais" que te redireciona à página da loja.
 
 A ideia era criar algo parecido com uma loja online simples, só usando HTML e CSS.
 
@@ -10,7 +10,6 @@ A ideia era criar algo parecido com uma loja online simples, só usando HTML e C
 
 - A página tem 3 seções: Livros, Cafés e Jogos
 - Cada seção tem um card com as informações do produto
-- Ao clicar em "Adicionar", aparece uma notificação no canto da tela
 - Não precisa de servidor nem de instalar nada, é só abrir o arquivo no navegador
 
 ## Como rodar
